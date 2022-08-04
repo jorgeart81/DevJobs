@@ -26,6 +26,13 @@
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 @auth
+                    <!-- Notifications -->
+                    @if (auth()->user()->rol === 2)
+                        <a href="{{ route('notificaciones') }}"
+                            class="mr-2 w-7 h-7 bg-green-500 hover:bg-green-700 rounded-full flex flex-col justify-center items-center text-sm font-bold p-0 text-white">
+                            {{ auth()->user()->unreadNotifications->count() }}
+                        </a>
+                    @endif
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
@@ -100,6 +107,22 @@
                 <x-responsive-nav-link :href="route('vacantes.create')" :active="request()->routeIs('vacantes.create')">
                     {{ __('Crear Vacante') }}
                 </x-responsive-nav-link>
+                <!-- Notifications -->
+                @if (auth()->user()->rol === 2)
+                    <div class="flex gap-2 items-center p-3">
+                        <a href="{{ route('notificaciones') }}"
+                            class="w-7 h-7 bg-green-500 hover:bg-green-700 rounded-full flex flex-col justify-center items-center text-sm font-bold p-0 text-white">
+                            {{ auth()->user()->unreadNotifications->count() }}
+                        </a>
+                        <p class="text-base font-medium text-gray-600">
+                            @choice(
+                                'Notificación|Notificaciones',
+                                auth()->user()->unreadNotifications->count(),
+                            )
+                        </p>
+                    </div>
+                @endif
+
             </div>
 
             <!-- Responsive Settings Options -->
@@ -117,7 +140,7 @@
                         <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                            {{ __('Log Out') }}
+                            {{ __('Cerrar Sesión') }}
                         </x-responsive-nav-link>
                     </form>
                 </div>
